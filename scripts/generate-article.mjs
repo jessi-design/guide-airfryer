@@ -19,11 +19,11 @@ const TARGET_WORDS = 2500;
 const MODEL = process.env.ARTICLE_MODEL || 'claude-sonnet-5';
 
 async function main() {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = (process.env.ANTHROPIC_API_KEY || '').trim();
   if (!apiKey) {
     throw new Error('ANTHROPIC_API_KEY manquant. Ajoute-le en variable d\'environnement ou en secret GitHub.');
   }
-  const amazonTag = process.env.AMAZON_TAG;
+  const amazonTag = (process.env.AMAZON_TAG || '').trim();
   if (!amazonTag) {
     throw new Error('AMAZON_TAG manquant (ton tag d\'affilié Amazon Associates, ex: monsite-21).');
   }
