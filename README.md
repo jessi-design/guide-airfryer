@@ -12,6 +12,7 @@ GitHub Actions (cron quotidien)
        → choisit le prochain sujet dans data/topics.json
        → appelle l'API Claude pour rédiger l'article (JSON structuré)
        → insère les liens Amazon depuis data/products.json (uniquement les produits "verified": true)
+       → récupère une image d'illustration libre de droits sur Pexels
        → écrit un fichier .md dans src/content/articles/
    → commit + push automatique
    → Vercel détecte le push et redéploie le site
@@ -62,6 +63,9 @@ Dans ton dépôt GitHub : **Settings → Secrets and variables → Actions**.
 Onglet **Secrets** (valeurs sensibles) :
 - `ANTHROPIC_API_KEY` — la clé créée à l'étape 2.
 - `AMAZON_TAG` — ton tag d'affilié Amazon Associates (ex: `monsite-21`).
+- `PEXELS_API_KEY` — clé gratuite créée sur [pexels.com/api](https://www.pexels.com/api/), utilisée
+  pour ajouter une image d'illustration libre de droits à chaque article. Optionnel : sans cette
+  clé, les articles sont publiés sans image.
 
 Onglet **Variables** (non sensible, optionnel) :
 - `SITE_URL` — l'URL finale du site une fois déployé (ex: `https://guide-airfryer.vercel.app`).

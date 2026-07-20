@@ -15,6 +15,9 @@ const typeLabels: Record<string, string> = {
 ---
 
 <a class="card" href={`/articles/${entry.data.slug}/`}>
+  {entry.data.heroImage && (
+    <img class="card-thumb" src={entry.data.heroImage} alt={entry.data.heroImageAlt || entry.data.title} loading="lazy" />
+  )}
   <span class="tag">{typeLabels[entry.data.type]}</span>
   <h3>{entry.data.title}</h3>
   <p>{entry.data.description}</p>

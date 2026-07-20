@@ -12,6 +12,10 @@ const articles = defineCollection({
     topicId: z.string(),
     slug: z.string(),
     keywords: z.array(z.string()).default([]),
+    heroImage: z.string().optional(),
+    heroImageAlt: z.string().optional(),
+    heroImageCredit: z.string().optional(),
+    heroImageCreditUrl: z.string().optional(),
     faq: z
       .array(
         z.object({

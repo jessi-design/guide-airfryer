@@ -175,6 +175,14 @@ nav.main-nav a:hover {
   border-color: var(--color-primary);
 }
 
+.card-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 0 0 0.25rem;
+}
+
 .card .tag {
   font-size: 0.72rem;
   text-transform: uppercase;
@@ -209,6 +217,27 @@ article.post .meta {
   color: var(--color-muted);
   font-size: 0.88rem;
   margin-bottom: 1.5rem;
+}
+
+.hero-image {
+  margin: 0 0 1.5rem;
+}
+
+.hero-image img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.hero-image figcaption {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-top: 0.35rem;
+}
+
+.hero-image figcaption a {
+  color: var(--color-muted);
 }
 
 article.post .content h2 {

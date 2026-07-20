@@ -7,7 +7,19 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, description, pubDate, updatedDate, type, keywords, faq } = entry.data;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  type,
+  keywords,
+  faq,
+  heroImage,
+  heroImageAlt,
+  heroImageCredit,
+  heroImageCreditUrl,
+} = entry.data;
 
 const typeLabels: Record<string, string> = {
   comparatif: 'Comparatif',
@@ -57,7 +69,13 @@ if (faq && faq.length > 0) {
 }
 ---
 
-<BaseLayout title={`${title} | GuideAirfryer`} description={description} type="article" jsonLd={jsonLd}>
+<BaseLayout
+  title={`${title} | GuideAirfryer`}
+  description={description}
+  image={heroImage}
+  type="article"
+  jsonLd={jsonLd}
+>
   <nav class="breadcrumbs">
     <a href="/">Accueil</a> / <a href="/articles/">Articles</a> / {title}
   </nav>
@@ -68,6 +86,18 @@ if (faq && faq.length > 0) {
       Publié le {dateFmt.format(pubDate)}
       {updatedDate && ` · Mis à jour le ${dateFmt.format(updatedDate)}`}
     </p>
+    {heroImage && (
+      <figure class="hero-image">
+        <img src={heroImage} alt={heroImageAlt || title} loading="eager" />
+        {heroImageCredit && (
+          <figcaption>
+            Photo :{' '}
+            {heroImageCreditUrl ? <a href={heroImageCreditUrl} rel="nofollow noopener" target="_blank">{heroImageCredit}</a> : heroImageCredit}
+            {' '}/ Pexels
+          </figcaption>
+        )}
+      </figure>
+    )}
     <div class="disclosure">
       Cet article contient des liens d'affiliation Amazon. En tant que Partenaire Amazon,
       GuideAirfryer réalise un bénéfice sur les achats remplissant les conditions requises, sans

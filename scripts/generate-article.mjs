@@ -27,6 +27,10 @@ async function main() {
   if (!amazonTag) {
     throw new Error('AMAZON_TAG manquant (ton tag d\'affilié Amazon Associates, ex: monsite-21).');
   }
+  const pexelsApiKey = (process.env.PEXELS_API_KEY || '').replace(/\s+/g, '');
+  if (!pexelsApiKey) {
+    console.warn("PEXELS_API_KEY manquant : l'article sera publié sans image d'illustration.");
+  }
 
   await fs.mkdir(ARTICLES_DIR, { recursive: true });
 
@@ -70,6 +74,13 @@ async function main() {
   }
   console.log(`Liens d'affiliation insérés : ${insertedProducts.join(', ') || 'aucun'}`);
 
+  const heroImage = pexelsApiKey ? await fetchHeroImage(article.imageQuery || topic.title, pexelsApiKey) : null;
+  if (pexelsApiKey && !heroImage) {
+    console.warn("Aucune image trouvée sur Pexels pour cette requête, l'article sera publié sans image.");
+  } else if (heroImage) {
+    console.log(`Image trouvée : ${heroImage.url} (photo par ${heroImage.credit})`);
+  }
+
   const slug = await uniqueSlug(slugify(article.slug || article.title));
   const pubDate = new Date().toISOString().slice(0, 10);
   const filename = `${pubDate}-${slug}.md`;
@@ -84,6 +95,7 @@ async function main() {
     slug,
     keywords: article.keywords,
     faq: article.faq,
+    heroImage,
   });
 
   await fs.writeFile(filepath, `${frontmatter}\n${body}\n`, 'utf8');
@@ -185,6 +197,7 @@ Réponds UNIQUEMENT avec un bloc de code \`\`\`json contenant un objet avec exac
 - "keywords" : tableau de 6 à 10 mots-clés/expressions pertinents (strings).
 - "faq" : tableau de 4 à 6 objets {"q": "...", "a": "..."} avec des questions que se posent vraiment les internautes sur ce sujet, réponses concises (2-4 phrases).
 - "body" : le corps de l'article complet en Markdown (string), avec les marqueurs [[PRODUIT:id|texte]] si applicable.
+- "imageQuery" : une requête courte EN ANGLAIS (3-5 mots) pour trouver une photo de banque d'images (Pexels) qui illustre bien le sujet, sans marque ni nom de produit (ex: "crispy chicken wings kitchen", "air fryer french fries").
 
 N'ajoute aucun texte avant ou après le bloc \`\`\`json.`;
 
@@ -242,7 +255,7 @@ async function callAndParse(client, systemPrompt, messages) {
     }
   }
 
-  for (const key of ['title', 'description', 'slug', 'keywords', 'faq', 'body']) {
+  for (const key of ['title', 'description', 'slug', 'keywords', 'faq', 'body', 'imageQuery']) {
     if (!(key in parsed)) throw new Error(`Réponse du modèle incomplète, clé manquante : "${key}"`);
   }
 
@@ -280,6 +293,29 @@ function escapeControlCharsInStrings(text) {
     else result += ch;
   }
   return result;
+}
+
+async function fetchHeroImage(query, pexelsApiKey) {
+  try {
+    const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`;
+    const res = await fetch(url, { headers: { Authorization: pexelsApiKey } });
+    if (!res.ok) {
+      console.warn(`Pexels a répondu avec le statut ${res.status}, image ignorée.`);
+      return null;
+    }
+    const data = await res.json();
+    const photo = data.photos && data.photos[0];
+    if (!photo) return null;
+    return {
+      url: photo.src.large2x,
+      alt: photo.alt || query,
+      credit: photo.photographer,
+      creditUrl: photo.photographer_url,
+    };
+  } catch (err) {
+    console.warn(`Erreur lors de la récupération de l'image Pexels : ${err.message}`);
+    return null;
+  }
 }
 
 function injectAffiliateLinks(body, verifiedProducts, amazonTag) {
@@ -354,7 +390,7 @@ async function uniqueSlug(baseSlug) {
   return `${baseSlug}-${i}`;
 }
 
-function buildFrontmatter({ title, description, pubDate, type, topicId, slug, keywords, faq }) {
+function buildFrontmatter({ title, description, pubDate, type, topicId, slug, keywords, faq, heroImage }) {
   const lines = [
     '---',
     `title: ${JSON.stringify(title)}`,
@@ -367,6 +403,12 @@ function buildFrontmatter({ title, description, pubDate, type, topicId, slug, ke
   ];
   if (Array.isArray(faq) && faq.length > 0) {
     lines.push(`faq: ${JSON.stringify(faq)}`);
+  }
+  if (heroImage) {
+    lines.push(`heroImage: ${JSON.stringify(heroImage.url)}`);
+    lines.push(`heroImageAlt: ${JSON.stringify(heroImage.alt)}`);
+    lines.push(`heroImageCredit: ${JSON.stringify(heroImage.credit)}`);
+    lines.push(`heroImageCreditUrl: ${JSON.stringify(heroImage.creditUrl)}`);
   }
   lines.push('---');
   return lines.join('\n');
