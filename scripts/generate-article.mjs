@@ -208,7 +208,7 @@ N'ajoute aucun texte avant ou après le bloc \`\`\`json.`;
 async function callAndParse(client, systemPrompt, messages) {
   const response = await client.messages.create({
     model: MODEL,
-    max_tokens: 8000,
+    max_tokens: 16000,
     system: systemPrompt,
     messages,
   });
@@ -217,6 +217,13 @@ async function callAndParse(client, systemPrompt, messages) {
     .filter((block) => block.type === 'text')
     .map((block) => block.text)
     .join('\n');
+
+  if (response.stop_reason === 'max_tokens') {
+    throw new Error(
+      'La réponse du modèle a été coupée avant la fin (limite max_tokens atteinte). ' +
+        'Augmente max_tokens dans scripts/generate-article.mjs.'
+    );
+  }
 
   const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
   const jsonText = jsonMatch ? jsonMatch[1] : text;
