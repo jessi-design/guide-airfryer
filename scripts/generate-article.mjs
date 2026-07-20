@@ -19,11 +19,11 @@ const TARGET_WORDS = 2500;
 const MODEL = process.env.ARTICLE_MODEL || 'claude-sonnet-5';
 
 async function main() {
-  const apiKey = (process.env.ANTHROPIC_API_KEY || '').trim();
+  const apiKey = (process.env.ANTHROPIC_API_KEY || '').replace(/\s+/g, '');
   if (!apiKey) {
     throw new Error('ANTHROPIC_API_KEY manquant. Ajoute-le en variable d\'environnement ou en secret GitHub.');
   }
-  const amazonTag = (process.env.AMAZON_TAG || '').trim();
+  const amazonTag = (process.env.AMAZON_TAG || '').replace(/\s+/g, '');
   if (!amazonTag) {
     throw new Error('AMAZON_TAG manquant (ton tag d\'affilié Amazon Associates, ex: monsite-21).');
   }
