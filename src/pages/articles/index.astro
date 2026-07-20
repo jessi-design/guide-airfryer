@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout
+  title="Tous les articles | GuideAirfryer"
+  description="Retrouvez tous nos comparatifs, guides complets et astuces sur les friteuses sans huile."
+  wide
+>
+  <section class="hero">
+    <h1>Tous les articles</h1>
+    <p>{articles.length} article{articles.length > 1 ? 's' : ''} publié{articles.length > 1 ? 's' : ''}.</p>
+  </section>
+  <div class="article-grid">
+    {articles.map((entry) => <ArticleCard entry={entry} />)}
+  </div>
+</BaseLayout>

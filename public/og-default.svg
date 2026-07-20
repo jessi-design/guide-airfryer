@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#fdfaf6"/>
+  <rect x="0" y="0" width="1200" height="630" fill="none" stroke="#e8e0d8" stroke-width="4"/>
+  <text x="600" y="300" font-family="Georgia, serif" font-size="72" fill="#262220" text-anchor="middle">GuideAirfryer</text>
+  <text x="600" y="370" font-family="Arial, sans-serif" font-size="30" fill="#6b625c" text-anchor="middle">Comparatifs &amp; guides friteuse sans huile</text>
+</svg>

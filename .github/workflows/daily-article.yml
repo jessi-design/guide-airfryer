@@ -1,0 +1,50 @@
+name: Publication quotidienne d'un article
+
+on:
+  schedule:
+    # 06:00 UTC = 08:00 (hiver) / 07:00 (été) heure de Paris
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Générer l'article du jour
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
+          ARTICLE_MODEL: ${{ vars.ARTICLE_MODEL }}
+        run: npm run generate
+
+      - name: Vérifier que le site compile
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: npm run build
+
+      - name: Committer et pousser le nouvel article
+        run: |
+          git config user.name "guideairfryer-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/content/articles
+          if git diff --cached --quiet; then
+            echo "Aucun nouvel article à committer."
+          else
+            git commit -m "Article automatique du $(date -u +'%Y-%m-%d')"
+            git push
+          fi

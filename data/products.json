@@ -1,0 +1,95 @@
+{
+  "_readme": "Catalogue des produits pouvant être recommandés dans les articles. Pour chaque produit : remplace 'asin' par le vrai ASIN Amazon (visible dans l'URL du produit ou via SiteStripe) et passe 'verified' à true. Tant que 'verified' est à false, le script de génération N'INSÉRERA PAS ce produit dans les articles (pour ne jamais publier un lien cassé ou incorrect). Le tag d'affilié n'est jamais stocké ici : il est lu depuis la variable d'environnement AMAZON_TAG au moment de la génération.",
+  "products": [
+    {
+      "id": "ninja-af100",
+      "name": "Ninja Air Fryer AF100",
+      "brand": "Ninja",
+      "category": "compacte",
+      "note": "Format compact, idéal pour 1 à 2 personnes.",
+      "asin": "REMPLACER_ASIN",
+      "verified": false
+    },
+    {
+      "id": "ninja-max-pro",
+      "name": "Ninja Air Fryer Max Pro",
+      "brand": "Ninja",
+      "category": "haut-de-gamme",
+      "note": "Grande capacité, plusieurs modes de cuisson.",
+      "asin": "REMPLACER_ASIN",
+      "verified": false
+    },
+    {
+      "id": "philips-xxl",
+      "name": "Philips Airfryer XXL",
+      "brand": "Philips",
+      "category": "famille",
+      "note": "Grande capacité pour familles nombreuses, technologie Twin TurboStar.",
+      "asin": "REMPLACER_ASIN",
+      "verified": false
+    },
+    {
+      "id": "philips-essential",
+      "name": "Philips Airfryer Essential Compact",
+      "brand": "Philips",
+      "category": "entree-de-gamme",
+      "note": "Bon rapport qualité-prix pour débuter.",
+      "asin": "REMPLACER_ASIN",
+      "verified": false
+    },
+    {
+      "id": "moulinex-easy-fry",
+      "name": "Moulinex Easy Fry & Grill",
+      "brand": "Moulinex",
+      "category": "polyvalente",
+      "note": "Fonction friteuse + grill 2-en-1, budget maîtrisé.",
+      "asin": "REMPLACER_ASIN",
+      "verified": false
+    },
+    {
+      "id": "cosori-lite",
+      "name": "Cosori Air Fryer Lite",
+      "brand": "Cosori",
+      "category": "entree-de-gamme",
+      "note": "Interface simple, très bon rapport qualité-prix.",
+      "asin": "REMPLACER_ASIN",
+      "verified": false
+    },
+    {
+      "id": "cosori-dual-blaze",
+      "name": "Cosori Dual Blaze",
+      "brand": "Cosori",
+      "category": "haut-de-gamme",
+      "note": "Double zone de cuisson indépendante.",
+      "asin": "REMPLACER_ASIN",
+      "verified": false
+    },
+    {
+      "id": "tefal-easy-fry",
+      "name": "Tefal Easy Fry Dual",
+      "brand": "Tefal",
+      "category": "polyvalente",
+      "note": "Double panier, pratique pour cuire deux aliments séparément.",
+      "asin": "REMPLACER_ASIN",
+      "verified": false
+    },
+    {
+      "id": "instant-vortex-plus",
+      "name": "Instant Vortex Plus",
+      "brand": "Instant",
+      "category": "haut-de-gamme",
+      "note": "Multi-fonctions (friteuse, four, déshydrateur).",
+      "asin": "REMPLACER_ASIN",
+      "verified": false
+    },
+    {
+      "id": "severin-af1461",
+      "name": "Severin AF 1461",
+      "brand": "Severin",
+      "category": "compacte",
+      "note": "Petit budget, format compact pour 1-2 personnes.",
+      "asin": "REMPLACER_ASIN",
+      "verified": false
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles', ({ data }) => data.type === 'comparatif')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout
+  title="Comparatifs airfryer | GuideAirfryer"
+  description="Nos comparatifs de friteuses sans huile : marques, modèles, budgets et usages, pour choisir en toute confiance."
+  wide
+>
+  <section class="hero">
+    <h1>Comparatifs</h1>
+    <p>Des comparaisons détaillées entre modèles et marques d'airfryer pour vous aider à trancher.</p>
+  </section>
+  <div class="article-grid">
+    {articles.map((entry) => <ArticleCard entry={entry} />)}
+  </div>
+</BaseLayout>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const latest = articles.slice(0, 9);
+
+const description =
+  "Guides d'achat, comparatifs et astuces pour bien choisir et utiliser sa friteuse sans huile (airfryer) : tests, recettes et conseils pratiques.";
+---
+
+<BaseLayout title="GuideAirfryer — Comparatifs et guides sur les friteuses sans huile" description={description} wide>
+  <section class="hero">
+    <h1>Bien choisir et bien utiliser sa friteuse sans huile</h1>
+    <p>{description}</p>
+    <div class="category-links">
+      <a href="/comparatifs/">Comparatifs</a>
+      <a href="/guides/">Guides complets</a>
+      <a href="/astuces/">Astuces & recettes</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Derniers articles</h2>
+    <div class="article-grid">
+      {latest.map((entry) => <ArticleCard entry={entry} />)}
+    </div>
+  </section>
+</BaseLayout>
