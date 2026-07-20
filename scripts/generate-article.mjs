@@ -224,8 +224,15 @@ async function callAndParse(client, systemPrompt, messages) {
   let parsed;
   try {
     parsed = JSON.parse(jsonText);
-  } catch (err) {
-    throw new Error(`Impossible de parser la réponse du modèle en JSON : ${err.message}\n--- Réponse brute ---\n${text}`);
+  } catch {
+    // Le modèle insère parfois un vrai saut de ligne au lieu de "\n" dans une chaîne,
+    // ce qui casse un JSON.parse strict. On répare en échappant les caractères de
+    // contrôle bruts trouvés à l'intérieur des chaînes, puis on reparse.
+    try {
+      parsed = JSON.parse(escapeControlCharsInStrings(jsonText));
+    } catch (err) {
+      throw new Error(`Impossible de parser la réponse du modèle en JSON : ${err.message}\n--- Réponse brute ---\n${text}`);
+    }
   }
 
   for (const key of ['title', 'description', 'slug', 'keywords', 'faq', 'body']) {
@@ -233,6 +240,39 @@ async function callAndParse(client, systemPrompt, messages) {
   }
 
   return parsed;
+}
+
+function escapeControlCharsInStrings(text) {
+  let result = '';
+  let inString = false;
+  let escaped = false;
+  for (const ch of text) {
+    if (!inString) {
+      result += ch;
+      if (ch === '"') inString = true;
+      continue;
+    }
+    if (escaped) {
+      result += ch;
+      escaped = false;
+      continue;
+    }
+    if (ch === '\\') {
+      result += ch;
+      escaped = true;
+      continue;
+    }
+    if (ch === '"') {
+      result += ch;
+      inString = false;
+      continue;
+    }
+    if (ch === '\n') result += '\\n';
+    else if (ch === '\r') result += '\\r';
+    else if (ch === '\t') result += '\\t';
+    else result += ch;
+  }
+  return result;
 }
 
 function injectAffiliateLinks(body, verifiedProducts, amazonTag) {
