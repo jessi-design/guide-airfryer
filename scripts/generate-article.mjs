@@ -209,7 +209,6 @@ async function callAndParse(client, systemPrompt, messages) {
   const response = await client.messages.create({
     model: MODEL,
     max_tokens: 8000,
-    temperature: 0.7,
     system: systemPrompt,
     messages,
   });
