@@ -1,95 +1,95 @@
 {
-  "_readme": "Catalogue des produits pouvant être recommandés dans les articles. Pour chaque produit : remplace 'asin' par le vrai ASIN Amazon (visible dans l'URL du produit ou via SiteStripe) et passe 'verified' à true. Tant que 'verified' est à false, le script de génération N'INSÉRERA PAS ce produit dans les articles (pour ne jamais publier un lien cassé ou incorrect). Le tag d'affilié n'est jamais stocké ici : il est lu depuis la variable d'environnement AMAZON_TAG au moment de la génération.",
+  "_readme": "Catalogue des produits pouvant être recommandés dans les articles. Chaque ASIN a été vérifié manuellement sur Amazon.fr (modèle + titre du produit correspondent). Pour ajouter un nouveau produit : trouve son ASIN sur Amazon.fr, remplis 'asin' et passe 'verified' à true — sinon le script de génération ne l'utilisera jamais. Le tag d'affilié n'est jamais stocké ici : il est lu depuis la variable d'environnement AMAZON_TAG au moment de la génération.",
   "products": [
     {
       "id": "ninja-af100",
-      "name": "Ninja Air Fryer AF100",
+      "name": "Ninja Air Fryer AF100EU",
       "brand": "Ninja",
       "category": "compacte",
-      "note": "Format compact, idéal pour 1 à 2 personnes.",
-      "asin": "REMPLACER_ASIN",
-      "verified": false
+      "note": "Format compact 3,8L, idéal pour 1 à 2 personnes.",
+      "asin": "B07VWRDQKD",
+      "verified": true
     },
     {
       "id": "ninja-max-pro",
-      "name": "Ninja Air Fryer Max Pro",
+      "name": "Ninja Air Fryer Max Pro AF180EU",
       "brand": "Ninja",
       "category": "haut-de-gamme",
-      "note": "Grande capacité, plusieurs modes de cuisson.",
-      "asin": "REMPLACER_ASIN",
-      "verified": false
+      "note": "Grand tiroir 6,2L, rôtir/cuire/frire, familial.",
+      "asin": "B0CPFT191B",
+      "verified": true
     },
     {
       "id": "philips-xxl",
-      "name": "Philips Airfryer XXL",
+      "name": "Philips Airfryer Série 5000 XXL 7,2L",
       "brand": "Philips",
       "category": "famille",
-      "note": "Grande capacité pour familles nombreuses, technologie Twin TurboStar.",
-      "asin": "REMPLACER_ASIN",
-      "verified": false
+      "note": "Grande capacité pour familles nombreuses, technologie RapidAir.",
+      "asin": "B0BW4FMR47",
+      "verified": true
     },
     {
       "id": "philips-essential",
-      "name": "Philips Airfryer Essential Compact",
+      "name": "Philips Airfryer Série 2000 (4,2L)",
       "brand": "Philips",
       "category": "entree-de-gamme",
-      "note": "Bon rapport qualité-prix pour débuter.",
-      "asin": "REMPLACER_ASIN",
-      "verified": false
+      "note": "Format compact et abordable, bon point d'entrée pour débuter.",
+      "asin": "B0CWP6KQ4D",
+      "verified": true
     },
     {
       "id": "moulinex-easy-fry",
-      "name": "Moulinex Easy Fry & Grill",
+      "name": "Moulinex Easy Fry & Grill XXL",
       "brand": "Moulinex",
       "category": "polyvalente",
-      "note": "Fonction friteuse + grill 2-en-1, budget maîtrisé.",
-      "asin": "REMPLACER_ASIN",
-      "verified": false
+      "note": "Fonction friteuse + grill 2-en-1, 6,5L, budget maîtrisé.",
+      "asin": "B0B8J4Z5DW",
+      "verified": true
     },
     {
       "id": "cosori-lite",
-      "name": "Cosori Air Fryer Lite",
+      "name": "Cosori Air Fryer 2L",
       "brand": "Cosori",
       "category": "entree-de-gamme",
-      "note": "Interface simple, très bon rapport qualité-prix.",
-      "asin": "REMPLACER_ASIN",
-      "verified": false
+      "note": "Format compact 1-2 personnes, interface simple, très bon rapport qualité-prix.",
+      "asin": "B0F673T7L9",
+      "verified": true
     },
     {
       "id": "cosori-dual-blaze",
-      "name": "Cosori Dual Blaze",
+      "name": "Cosori Dual Blaze 6,4L",
       "brand": "Cosori",
       "category": "haut-de-gamme",
-      "note": "Double zone de cuisson indépendante.",
-      "asin": "REMPLACER_ASIN",
-      "verified": false
+      "note": "Chauffage double zone (haut et bas) indépendant.",
+      "asin": "B0FPWSDF86",
+      "verified": true
     },
     {
       "id": "tefal-easy-fry",
-      "name": "Tefal Easy Fry Dual",
+      "name": "Tefal Dual Easy Fry",
       "brand": "Tefal",
       "category": "polyvalente",
-      "note": "Double panier, pratique pour cuire deux aliments séparément.",
-      "asin": "REMPLACER_ASIN",
-      "verified": false
+      "note": "Double chambre 8,3L, 2 tiroirs indépendants, pratique pour cuire deux aliments séparément.",
+      "asin": "B0CF9TPSH9",
+      "verified": true
     },
     {
       "id": "instant-vortex-plus",
-      "name": "Instant Vortex Plus",
+      "name": "Instant Vortex Plus VersaZone",
       "brand": "Instant",
       "category": "haut-de-gamme",
-      "note": "Multi-fonctions (friteuse, four, déshydrateur).",
-      "asin": "REMPLACER_ASIN",
-      "verified": false
+      "note": "Multi-fonctions 8-en-1 (friteuse, pâtisserie, rôtis, déshydrateur).",
+      "asin": "B09ZVLX5MT",
+      "verified": true
     },
     {
       "id": "severin-af1461",
-      "name": "Severin AF 1461",
+      "name": "Severin FR 2461",
       "brand": "Severin",
       "category": "compacte",
-      "note": "Petit budget, format compact pour 1-2 personnes.",
-      "asin": "REMPLACER_ASIN",
-      "verified": false
+      "note": "Petit budget, panier 4L compact pour 1-2 personnes.",
+      "asin": "B0F9TRBWPD",
+      "verified": true
     }
   ]
 }
