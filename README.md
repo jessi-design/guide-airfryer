@@ -63,9 +63,11 @@ Dans ton dépôt GitHub : **Settings → Secrets and variables → Actions**.
 Onglet **Secrets** (valeurs sensibles) :
 - `ANTHROPIC_API_KEY` — la clé créée à l'étape 2.
 - `AMAZON_TAG` — ton tag d'affilié Amazon Associates (ex: `monsite-21`).
-- `PEXELS_API_KEY` — clé gratuite créée sur [pexels.com/api](https://www.pexels.com/api/), utilisée
-  pour ajouter une image d'illustration libre de droits à chaque article. Optionnel : sans cette
-  clé, les articles sont publiés sans image.
+- `AIRFRYER_PICTURES` — clé gratuite créée sur [pexels.com/api](https://www.pexels.com/api/),
+  utilisée pour ajouter une image d'illustration libre de droits à chaque article (le nom du
+  secret GitHub n'a pas besoin de correspondre au nom de la variable dans le code, il est
+  simplement référencé dans `.github/workflows/daily-article.yml`). Optionnel : sans cette clé,
+  les articles sont publiés sans image.
 
 Onglet **Variables** (non sensible, optionnel) :
 - `SITE_URL` — l'URL finale du site une fois déployé (ex: `https://guide-airfryer.vercel.app`).
