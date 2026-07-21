@@ -7,16 +7,25 @@ import Anthropic from '@anthropic-ai/sdk';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { generatePinImage } from './generate-pin.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const ARTICLES_DIR = path.join(ROOT, 'src', 'content', 'articles');
+const PINS_DIR = path.join(ROOT, 'public', 'pins');
 const PRODUCTS_PATH = path.join(ROOT, 'data', 'products.json');
 const TOPICS_PATH = path.join(ROOT, 'data', 'topics.json');
 
 const MIN_WORDS = 2200;
 const TARGET_WORDS = 2500;
 const MODEL = process.env.ARTICLE_MODEL || 'claude-sonnet-5';
+const SITE_HOST = (process.env.SITE_URL || 'https://guide-airfryer.vercel.app').replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+const TYPE_BADGES = {
+  comparatif: 'Comparatif',
+  complet: 'Guide complet',
+  thematique: 'Astuce & idée',
+};
 
 async function main() {
   const apiKey = (process.env.ANTHROPIC_API_KEY || '').replace(/\s+/g, '');
@@ -86,6 +95,29 @@ async function main() {
   const filename = `${pubDate}-${slug}.md`;
   const filepath = path.join(ARTICLES_DIR, filename);
 
+  let pinImage = null;
+  if (heroImage) {
+    try {
+      const pinIndex = await countExistingArticles();
+      const pinOutPath = path.join(PINS_DIR, `${slug}.png`);
+      const { layout, colorway } = await generatePinImage({
+        index: pinIndex,
+        badge: TYPE_BADGES[topic.type],
+        title: article.pinTitle || article.title,
+        subtitle: article.description.slice(0, 60),
+        siteUrl: SITE_HOST,
+        photoUrl: heroImage.url,
+        outPath: pinOutPath,
+      });
+      pinImage = `/pins/${slug}.png`;
+      console.log(`Épingle Pinterest générée : ${pinImage} (mise en page ${layout}, teinte ${colorway})`);
+    } catch (err) {
+      console.warn(`Impossible de générer l'épingle Pinterest : ${err.message}`);
+    }
+  } else {
+    console.warn("Pas d'image héro disponible : l'épingle Pinterest n'a pas été générée.");
+  }
+
   const frontmatter = buildFrontmatter({
     title: article.title,
     description: article.description,
@@ -96,6 +128,9 @@ async function main() {
     keywords: article.keywords,
     faq: article.faq,
     heroImage,
+    pinImage,
+    pinTitle: article.pinTitle,
+    pinDescription: article.pinDescription,
   });
 
   await fs.writeFile(filepath, `${frontmatter}\n${body}\n`, 'utf8');
@@ -127,6 +162,15 @@ async function getExistingTopicIds() {
     if (match) ids.add(match[1]);
   }
   return ids;
+}
+
+async function countExistingArticles() {
+  try {
+    const files = await fs.readdir(ARTICLES_DIR);
+    return files.filter((f) => f.endsWith('.md')).length;
+  } catch {
+    return 0;
+  }
 }
 
 function pickNextTopic(topicsData, existingTopicIds) {
@@ -198,6 +242,8 @@ Réponds UNIQUEMENT avec un bloc de code \`\`\`json contenant un objet avec exac
 - "faq" : tableau de 4 à 6 objets {"q": "...", "a": "..."} avec des questions que se posent vraiment les internautes sur ce sujet, réponses concises (2-4 phrases).
 - "body" : le corps de l'article complet en Markdown (string), avec les marqueurs [[PRODUIT:id|texte]] si applicable.
 - "imageQuery" : une requête courte EN ANGLAIS (3-5 mots) pour trouver une photo de banque d'images (Pexels) qui illustre bien le sujet, sans marque ni nom de produit (ex: "crispy chicken wings kitchen", "air fryer french fries").
+- "pinTitle" : titre court et accrocheur pour une épingle Pinterest (2-4 mots maximum, ex: "6 habitudes", "Ninja vs Philips"), qui doit tenir sur une grande ligne de titre manuscrit sur une image verticale. Pas de ponctuation finale.
+- "pinDescription" : description pour Pinterest (jusqu'à 500 caractères), mots-clés importants en début de phrase, ton engageant, peut inclure 2-3 hashtags pertinents à la fin.
 
 N'ajoute aucun texte avant ou après le bloc \`\`\`json.`;
 
@@ -255,7 +301,7 @@ async function callAndParse(client, systemPrompt, messages) {
     }
   }
 
-  for (const key of ['title', 'description', 'slug', 'keywords', 'faq', 'body', 'imageQuery']) {
+  for (const key of ['title', 'description', 'slug', 'keywords', 'faq', 'body', 'imageQuery', 'pinTitle', 'pinDescription']) {
     if (!(key in parsed)) throw new Error(`Réponse du modèle incomplète, clé manquante : "${key}"`);
   }
 
@@ -390,7 +436,20 @@ async function uniqueSlug(baseSlug) {
   return `${baseSlug}-${i}`;
 }
 
-function buildFrontmatter({ title, description, pubDate, type, topicId, slug, keywords, faq, heroImage }) {
+function buildFrontmatter({
+  title,
+  description,
+  pubDate,
+  type,
+  topicId,
+  slug,
+  keywords,
+  faq,
+  heroImage,
+  pinImage,
+  pinTitle,
+  pinDescription,
+}) {
   const lines = [
     '---',
     `title: ${JSON.stringify(title)}`,
@@ -409,6 +468,11 @@ function buildFrontmatter({ title, description, pubDate, type, topicId, slug, ke
     lines.push(`heroImageAlt: ${JSON.stringify(heroImage.alt)}`);
     lines.push(`heroImageCredit: ${JSON.stringify(heroImage.credit)}`);
     lines.push(`heroImageCreditUrl: ${JSON.stringify(heroImage.creditUrl)}`);
+  }
+  if (pinImage) {
+    lines.push(`pinImage: ${JSON.stringify(pinImage)}`);
+    lines.push(`pinTitle: ${JSON.stringify(pinTitle)}`);
+    lines.push(`pinDescription: ${JSON.stringify(pinDescription)}`);
   }
   lines.push('---');
   return lines.join('\n');

@@ -13,12 +13,13 @@
     "generate": "node scripts/generate-article.mjs"
   },
   "dependencies": {
-    "astro": "^7.1.1",
+    "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.2.1",
-    "@astrojs/rss": "^4.0.11"
+    "astro": "^7.1.1"
   },
   "devDependencies": {
-    "@anthropic-ai/sdk": "^0.68.0"
+    "@anthropic-ai/sdk": "^0.68.0",
+    "playwright": "^1.61.1"
   },
   "allowScripts": {
     "esbuild@0.28.1": true

@@ -10,9 +10,10 @@ interface Props {
   type?: 'website' | 'article';
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   wide?: boolean;
+  noindex?: boolean;
 }
 
-const { title, description, image, type = 'website', jsonLd, wide = false } = Astro.props;
+const { title, description, image, type = 'website', jsonLd, wide = false, noindex = false } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : new URL('/og-default.svg', Astro.site);
@@ -30,6 +31,7 @@ const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonicalURL} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title="Flux RSS" href="/rss.xml" />

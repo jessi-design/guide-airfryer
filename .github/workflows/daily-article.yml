@@ -25,12 +25,22 @@ jobs:
       - name: Installer les dépendances
         run: npm ci
 
+      - name: Mettre en cache le navigateur Playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Installer Chromium (pour générer les épingles Pinterest)
+        run: npx playwright install --with-deps chromium
+
       - name: Générer l'article du jour
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
           PEXELS_API_KEY: ${{ secrets.AIRFRYER_PICTURES }}
           ARTICLE_MODEL: ${{ vars.ARTICLE_MODEL }}
+          SITE_URL: ${{ vars.SITE_URL }}
         run: npm run generate
 
       - name: Vérifier que le site compile
@@ -42,7 +52,7 @@ jobs:
         run: |
           git config user.name "guideairfryer-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add src/content/articles
+          git add src/content/articles public/pins
           if git diff --cached --quiet; then
             echo "Aucun nouvel article à committer."
           else

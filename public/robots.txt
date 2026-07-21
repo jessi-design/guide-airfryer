@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /pinterest
 
 Sitemap: /sitemap-index.xml
