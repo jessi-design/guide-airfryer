@@ -13,10 +13,24 @@ GitHub Actions (cron quotidien)
        → appelle l'API Claude pour rédiger l'article (JSON structuré)
        → insère les liens Amazon depuis data/products.json (uniquement les produits "verified": true)
        → récupère une image d'illustration libre de droits sur Pexels
+       → génère une image d'épingle Pinterest prête à publier (3 mises en page x 2 teintes en rotation)
        → écrit un fichier .md dans src/content/articles/
    → commit + push automatique
    → Vercel détecte le push et redéploie le site
 ```
+
+### Publier sur Pinterest
+
+Chaque article génère automatiquement une image d'épingle (1000x1500) ainsi qu'un titre et une
+description adaptés à Pinterest. Va sur **`https://<ton-site>/pinterest`** (page volontairement
+non référencée, absente du menu et du sitemap) pour :
+
+1. Télécharger l'image de l'épingle.
+2. Copier le titre et la description en un clic.
+3. Aller sur Pinterest et créer l'épingle manuellement avec ces trois éléments.
+
+La publication automatique *sur* Pinterest (sans action manuelle) demanderait l'accès à l'API
+Pinterest, soumis à validation par Pinterest — non couvert par ce système pour l'instant.
 
 Aucune intervention manuelle n'est nécessaire une fois la configuration ci-dessous effectuée.
 Le système ne tombe jamais à court de sujets : une fois les ~90 sujets de `data/topics.json`
