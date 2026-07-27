@@ -301,9 +301,15 @@ async function callAndParse(client, systemPrompt, messages) {
     }
   }
 
-  for (const key of ['title', 'description', 'slug', 'keywords', 'faq', 'body', 'imageQuery', 'pinTitle', 'pinDescription']) {
+  // Champs essentiels : on échoue si absents.
+  for (const key of ['title', 'description', 'slug', 'keywords', 'faq', 'body']) {
     if (!(key in parsed)) throw new Error(`Réponse du modèle incomplète, clé manquante : "${key}"`);
   }
+  // Champs secondaires (image, Pinterest) : le modèle les oublie parfois,
+  // on tolère leur absence avec un repli plutôt que d'échouer toute la génération.
+  parsed.imageQuery = parsed.imageQuery || parsed.title;
+  parsed.pinTitle = parsed.pinTitle || parsed.title;
+  parsed.pinDescription = parsed.pinDescription || parsed.description;
 
   return parsed;
 }
